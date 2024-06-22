@@ -19,10 +19,6 @@ import {Swipeable} from 'react-native-gesture-handler';
 import {softDelete} from '../../redux/reducers/country.slice.ts';
 
 export default function CountryDataTable() {
-  const isDarkMode = useColorScheme() === 'dark';
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
   const dispatch: AppDispatch = useDispatch();
   const countryData = useSelector(
     (state: RootState) => state.countryReducer.data,
@@ -41,20 +37,16 @@ export default function CountryDataTable() {
   };
 
   return (
-    <View>
+    <View style={styles.wrapper}>
       <CountrySearchBar
         countryData={countryData}
         setFilteredData={setFilteredData}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Table
-          countryData={countryData}
-          filteredData={filteredData}
-          handleDelete={handleDelete}
-        />
-      </ScrollView>
+      <Table
+        countryData={countryData}
+        filteredData={filteredData}
+        handleDelete={handleDelete}
+      />
     </View>
   );
 }
@@ -70,6 +62,10 @@ const Table: React.FC<TableProps> = ({
   filteredData,
   handleDelete,
 }) => {
+  const isDarkMode = useColorScheme() === 'dark';
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? Colors.darker : '#fff',
+  };
   const [page, setPage] = React.useState<number>(0);
   const [numberOfItemsPerPageList] = React.useState([15, 30, 60]);
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
@@ -94,45 +90,47 @@ const Table: React.FC<TableProps> = ({
 
   return (
     <DataTable style={styles.dataTable}>
-      <DataTable.Header>
+      <DataTable.Header style={styles.dataTableHeader}>
         <DataTable.Title>Country</DataTable.Title>
         <DataTable.Title numeric>Flag</DataTable.Title>
         <DataTable.Title numeric>Currency</DataTable.Title>
       </DataTable.Header>
-
-      {tableData.slice(from, to).map((item, index) => (
-        <Swipeable
-          key={index}
-          renderRightActions={() => (
-            <TouchableOpacity
-              onPress={() => handleDelete(item.name)}
-              style={styles.deleteButtonView}>
-              <Icon source="delete" color="#fff" size={30} />
-            </TouchableOpacity>
-          )}
-          friction={2}
-          rightThreshold={40}>
-          <DataTable.Row style={styles.row}>
-            <DataTable.Cell>{item.name}</DataTable.Cell>
-            <DataTable.Cell numeric>{item.flag}</DataTable.Cell>
-            <DataTable.Cell numeric>
-              {item.currencyArray[0]?.currency || 'N/A'}
-            </DataTable.Cell>
-          </DataTable.Row>
-        </Swipeable>
-      ))}
-
-      <DataTable.Pagination
-        page={page}
-        numberOfPages={Math.ceil(tableData.length / itemsPerPage)}
-        onPageChange={page => setPage(page)}
-        label={`${from + 1}-${to} of ${tableData.length}`}
-        numberOfItemsPerPageList={numberOfItemsPerPageList}
-        numberOfItemsPerPage={itemsPerPage}
-        onItemsPerPageChange={onItemsPerPageChange}
-        showFastPaginationControls
-        selectPageDropdownLabel={'Rows per page'}
-      />
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        style={backgroundStyle}>
+        {tableData.slice(from, to).map((item, index) => (
+          <Swipeable
+            key={index}
+            renderRightActions={() => (
+              <TouchableOpacity
+                onPress={() => handleDelete(item.name)}
+                style={styles.deleteButtonView}>
+                <Icon source="delete" color="#fff" size={30} />
+              </TouchableOpacity>
+            )}
+            friction={2}
+            rightThreshold={40}>
+            <DataTable.Row style={styles.row}>
+              <DataTable.Cell>{item.name}</DataTable.Cell>
+              <DataTable.Cell numeric>{item.flag}</DataTable.Cell>
+              <DataTable.Cell numeric>
+                {item.currencyArray[0]?.currency || 'N/A'}
+              </DataTable.Cell>
+            </DataTable.Row>
+          </Swipeable>
+        ))}
+        <DataTable.Pagination
+          page={page}
+          numberOfPages={Math.ceil(tableData.length / itemsPerPage)}
+          onPageChange={page => setPage(page)}
+          label={`${from + 1}-${to} of ${tableData.length}`}
+          numberOfItemsPerPageList={numberOfItemsPerPageList}
+          numberOfItemsPerPage={itemsPerPage}
+          onItemsPerPageChange={onItemsPerPageChange}
+          showFastPaginationControls
+          selectPageDropdownLabel={'Rows per page'}
+        />
+      </ScrollView>
     </DataTable>
   );
 };
@@ -224,7 +222,7 @@ const CountrySearchBar: React.FC<CountrySearchBarProps> = ({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#ffffff',
-    zIndex: 20,
+    zIndex: 3,
     flex: 1,
     position: 'relative',
   },
@@ -241,7 +239,7 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     position: 'absolute',
-    zIndex: 90,
+    zIndex: 4,
     right: 3,
     top: 5,
   },
@@ -269,5 +267,15 @@ const styles = StyleSheet.create({
   },
   dataTable: {
     paddingTop: 50,
+    position: 'relative',
+    zIndex: 1,
+  },
+  dataTableHeader: {
+    backgroundColor: '#dddddd',
+    width: '100%',
+  },
+  wrapper: {
+    paddingBottom: 160,
+    backgroundColor: '#fff',
   },
 });
