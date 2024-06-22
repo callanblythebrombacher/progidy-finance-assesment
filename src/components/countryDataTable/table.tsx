@@ -42,15 +42,12 @@ export default function CountryDataTable() {
 
   return (
     <View>
-      <Appbar.Header style={styles.appBar}>
-        <CountrySearchBar
-          countryData={countryData}
-          setFilteredData={setFilteredData}
-        />
-      </Appbar.Header>
+      <CountrySearchBar
+        countryData={countryData}
+        setFilteredData={setFilteredData}
+      />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={styles.scrollViewContent}
         style={backgroundStyle}>
         <Table
           countryData={countryData}
@@ -96,7 +93,7 @@ const Table: React.FC<TableProps> = ({
   const to = Math.min((page + 1) * itemsPerPage, tableData.length);
 
   return (
-    <DataTable>
+    <DataTable style={styles.dataTable}>
       <DataTable.Header>
         <DataTable.Title>Country</DataTable.Title>
         <DataTable.Title numeric>Flag</DataTable.Title>
@@ -177,8 +174,16 @@ const CountrySearchBar: React.FC<CountrySearchBarProps> = ({
 
   const renderItem = ({item}: {item: NormalizedCountryArrayItem}) => (
     <>
-      <List.Item title={item.alpha2} onPress={() => handleItemPress(item)} />
-      <List.Item title={item.alpha3} onPress={() => handleItemPress(item)} />
+      <List.Item
+        style={styles.autoCompleteListItem}
+        title={item.alpha2}
+        onPress={() => handleItemPress(item)}
+      />
+      <List.Item
+        style={styles.autoCompleteListItem}
+        title={item.alpha3}
+        onPress={() => handleItemPress(item)}
+      />
     </>
   );
 
@@ -190,27 +195,27 @@ const CountrySearchBar: React.FC<CountrySearchBarProps> = ({
 
   return (
     <View style={styles.container}>
-      <View>
-        <TextInput
-          style={styles.input}
-          placeholder="Search"
-          value={searchQuery}
-          onChangeText={handleSearch}
+      <TextInput
+        style={styles.input}
+        placeholder="Search"
+        value={searchQuery}
+        onChangeText={handleSearch}
+      />
+      {searchQuery !== '' && (
+        <IconButton
+          icon="close"
+          onPress={clearInput}
+          style={styles.iconButton}
         />
-        {searchQuery !== '' && (
-          <IconButton
-            icon="close"
-            onPress={clearInput}
-            style={styles.iconButton}
-          />
-        )}
-      </View>
+      )}
       {autocompleteData.length > 0 && (
-        <FlatList
-          data={autocompleteData}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-        />
+        <View style={styles.autocompleteListView}>
+          <FlatList
+            data={autocompleteData}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </View>
       )}
     </View>
   );
@@ -218,8 +223,10 @@ const CountrySearchBar: React.FC<CountrySearchBarProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#ffffff',
+    zIndex: 20,
+    flex: 1,
+    position: 'relative',
   },
   input: {
     height: 40,
@@ -229,15 +236,17 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginLeft: 10,
     marginRight: 10,
+    marginTop: 10,
     backgroundColor: 'white',
   },
   iconButton: {
     position: 'absolute',
-    right: 0,
-    bottom: 2.5,
+    zIndex: 90,
+    right: 3,
+    top: 5,
   },
   row: {
-    height: 60,
+    height: 70,
     backgroundColor: 'white',
   },
   deleteButtonView: {
@@ -246,13 +255,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  appBar: {
-    backgroundColor: '#ffffff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#919191',
+  autocompleteListView: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    top: 60,
+    width: '100%',
+    height: 900,
   },
-  scrollViewContent: {
-    flexGrow: 1, // Ensure the ScrollView can grow to fit content
-    paddingBottom: 160, // Adjust padding as necessary to prevent cutoff
+  autoCompleteListItem: {
+    backgroundColor: 'white',
+    borderBottomColor: '#e7e7e7',
+    borderBottomWidth: 1,
+  },
+  dataTable: {
+    paddingTop: 50,
   },
 });
