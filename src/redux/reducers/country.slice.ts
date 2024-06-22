@@ -23,8 +23,8 @@ export const countrySlice = createSlice({
       })
       .addCase(countryThunk.fulfilled, (state, action: PayloadAction<any>) => {
         state.pending = false;
-        const payload: AxiosResponse<any> = action.payload;
-        state.data = payload.data;
+        const payload = action.payload;
+        state.data = payload;
       })
       .addCase(countryThunk.rejected, (state, action: PayloadAction<any>) => {
         state.pending = false;
