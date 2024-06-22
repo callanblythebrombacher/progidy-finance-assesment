@@ -153,10 +153,10 @@ const CountrySearchBar: React.FC<CountrySearchBarProps> = ({
     setSearchQuery(text);
     if (text) {
       const autocompleteData =
-        countryData?.filter(
-          country =>
-            country.alpha2.toLowerCase().includes(text.toLowerCase()) ||
-            country.alpha3.toLowerCase().includes(text.toLowerCase()),
+        countryData?.filter(country =>
+          country.currencyArray[0]?.name
+            .toLowerCase()
+            .includes(text.toLowerCase()),
         ) ?? [];
       setAutocompleteData(autocompleteData);
     } else {
@@ -171,22 +171,15 @@ const CountrySearchBar: React.FC<CountrySearchBarProps> = ({
   };
 
   const renderItem = ({item}: {item: NormalizedCountryArrayItem}) => (
-    <>
-      <List.Item
-        style={styles.autoCompleteListItem}
-        title={item.alpha2}
-        onPress={() => handleItemPress(item)}
-      />
-      <List.Item
-        style={styles.autoCompleteListItem}
-        title={item.alpha3}
-        onPress={() => handleItemPress(item)}
-      />
-    </>
+    <List.Item
+      style={styles.autoCompleteListItem}
+      title={item.currencyArray[0]?.name || 'N/A'}
+      onPress={() => handleItemPress(item)}
+    />
   );
 
   const handleItemPress = (item: NormalizedCountryArrayItem) => {
-    setSearchQuery(item.name);
+    setSearchQuery(item.currencyArray[0]?.name || 'N/A');
     setFilteredData(item);
     setAutocompleteData([]);
   };
