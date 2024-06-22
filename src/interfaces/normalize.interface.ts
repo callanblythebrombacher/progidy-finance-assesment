@@ -14,7 +14,7 @@ export interface CountryDataItem {
   };
 }
 
-interface NormalizedCurrencyArrayItem extends Currency {
+export interface NormalizedCurrencyArrayItem extends Currency {
   currency: string;
 }
 

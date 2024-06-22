@@ -17,6 +17,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {NormalizedCountryArrayItem} from '../../interfaces/normalize.interface.ts';
 import {Swipeable} from 'react-native-gesture-handler';
 import {softDelete} from '../../redux/reducers/country.slice.ts';
+import {Normalize} from '../../utils/noramlize.ts';
 
 export default function CountryDataTable() {
   const dispatch: AppDispatch = useDispatch();
@@ -24,8 +25,9 @@ export default function CountryDataTable() {
     (state: RootState) => state.countryReducer.data,
   );
 
-  const [filteredData, setFilteredData] =
-    useState<NormalizedCountryArrayItem | null>(null);
+  const [filteredData, setFilteredData] = useState<
+    NormalizedCountryArrayItem[] | null
+  >(null);
 
   React.useEffect(() => {
     dispatch(countryThunk());
@@ -53,7 +55,7 @@ export default function CountryDataTable() {
 
 interface TableProps {
   countryData: NormalizedCountryArrayItem[] | null;
-  filteredData: NormalizedCountryArrayItem | null;
+  filteredData: NormalizedCountryArrayItem[] | null;
   handleDelete: (name: string) => void;
 }
 
@@ -79,7 +81,7 @@ const Table: React.FC<TableProps> = ({
   }, [itemsPerPage]);
 
   const tableData = useMemo(() => {
-    return filteredData !== null ? [filteredData] : countryData ?? [];
+    return filteredData !== null ? filteredData : countryData ?? [];
   }, [countryData, filteredData]);
 
   if (!tableData.length) {
@@ -98,27 +100,30 @@ const Table: React.FC<TableProps> = ({
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-        {tableData.slice(from, to).map((item, index) => (
-          <Swipeable
-            key={index}
-            renderRightActions={() => (
-              <TouchableOpacity
-                onPress={() => handleDelete(item.name)}
-                style={styles.deleteButtonView}>
-                <Icon source="delete" color="#fff" size={30} />
-              </TouchableOpacity>
-            )}
-            friction={2}
-            rightThreshold={40}>
-            <DataTable.Row style={styles.row}>
-              <DataTable.Cell>{item.name}</DataTable.Cell>
-              <DataTable.Cell numeric>{item.flag}</DataTable.Cell>
-              <DataTable.Cell numeric>
-                {item.currencyArray[0]?.currency || 'N/A'}
-              </DataTable.Cell>
-            </DataTable.Row>
-          </Swipeable>
-        ))}
+        {tableData.slice(from, to).map((item, index) => {
+          const currencyString = item.currencyArray
+            .map(currency => currency?.currency || 'N/A')
+            .join(', ');
+          return (
+            <Swipeable
+              key={index}
+              renderRightActions={() => (
+                <TouchableOpacity
+                  onPress={() => handleDelete(item.name)}
+                  style={styles.deleteButtonView}>
+                  <Icon source="delete" color="#fff" size={30} />
+                </TouchableOpacity>
+              )}
+              friction={2}
+              rightThreshold={40}>
+              <DataTable.Row style={styles.row}>
+                <DataTable.Cell>{item.name}</DataTable.Cell>
+                <DataTable.Cell numeric>{item.flag}</DataTable.Cell>
+                <DataTable.Cell numeric>{currencyString}</DataTable.Cell>
+              </DataTable.Row>
+            </Swipeable>
+          );
+        })}
         <DataTable.Pagination
           page={page}
           numberOfPages={Math.ceil(tableData.length / itemsPerPage)}
@@ -137,7 +142,7 @@ const Table: React.FC<TableProps> = ({
 
 interface CountrySearchBarProps {
   countryData: NormalizedCountryArrayItem[] | null;
-  setFilteredData: (arg: NormalizedCountryArrayItem | null) => void;
+  setFilteredData: (arg: NormalizedCountryArrayItem[] | null) => void;
 }
 
 const CountrySearchBar: React.FC<CountrySearchBarProps> = ({
@@ -150,15 +155,29 @@ const CountrySearchBar: React.FC<CountrySearchBarProps> = ({
   >([]);
 
   const handleSearch = (text: string) => {
-    setSearchQuery(text);
-    if (text) {
-      const autocompleteData =
-        countryData?.filter(country =>
-          country.currencyArray[0]?.name
-            .toLowerCase()
-            .includes(text.toLowerCase()),
-        ) ?? [];
-      setAutocompleteData(autocompleteData);
+    const trimmedText = text.trim();
+    setSearchQuery(trimmedText);
+
+    if (trimmedText) {
+      const seenCurrencyNames: Set<string> = new Set();
+      const filteredData =
+        countryData?.filter(country => {
+          const currencyName = country.currencyArray[0]?.name.toLowerCase();
+          const lowercaseText = trimmedText.toLowerCase();
+
+          // Check if currency name includes the search text and is not already seen
+          if (
+            currencyName &&
+            currencyName.includes(lowercaseText) &&
+            !seenCurrencyNames.has(currencyName)
+          ) {
+            seenCurrencyNames.add(currencyName);
+            return true; // Include this country in filtered data
+          }
+          return false; // Exclude this country from filtered data
+        }) ?? [];
+
+      setAutocompleteData(filteredData);
     } else {
       setAutocompleteData([]);
     }
@@ -179,8 +198,16 @@ const CountrySearchBar: React.FC<CountrySearchBarProps> = ({
   );
 
   const handleItemPress = (item: NormalizedCountryArrayItem) => {
-    setSearchQuery(item.currencyArray[0]?.name || 'N/A');
-    setFilteredData(item);
+    setSearchQuery(item.currencyArray[0].name);
+    const filteredData = countryData?.filter(country => {
+      const result = country.currencyArray.map(currencyItem => {
+        return currencyItem.name === item.currencyArray[0].name;
+      });
+      return result.indexOf(true) !== -1;
+    });
+    if (filteredData) {
+      setFilteredData(filteredData);
+    }
     setAutocompleteData([]);
   };
 

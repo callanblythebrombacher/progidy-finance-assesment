@@ -1,6 +1,8 @@
 import {
   CountryDataItem,
+  Currency,
   NormalizedCountryArrayItem,
+  NormalizedCurrencyArrayItem,
 } from '../interfaces/normalize.interface.ts';
 
 export class Normalize {
