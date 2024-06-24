@@ -1,12 +1,21 @@
 import {NormalizedCountryArrayItem} from '../interfaces/normalize.interface';
 
 export class Filter {
+  /**
+   * Filter country data based on picker value and search query
+   * @param pickerValue - Value determining the filter criteria (1: Currency, 2: Alpha2, 3: Alpha3)
+   * @param searchQuery - Query string used for filtering
+   * @param countryData - Array of normalized country data to filter
+   * @returns Filtered array of NormalizedCountryArrayItem
+   */
   public getFilteredCountryData(
     pickerValue: number,
     searchQuery: string,
     countryData: NormalizedCountryArrayItem[] | null,
   ): NormalizedCountryArrayItem[] {
     let filteredData: NormalizedCountryArrayItem[] = [];
+
+    // Ensure countryData is not null
     if (countryData !== null) {
       switch (pickerValue) {
         case 1:
@@ -23,9 +32,16 @@ export class Filter {
           break;
       }
     }
+
     return filteredData;
   }
 
+  /**
+   * Filter country data by currency name
+   * @param searchQuery - Query string for filtering by currency name
+   * @param countryData - Array of normalized country data to filter
+   * @returns Filtered array of NormalizedCountryArrayItem
+   */
   private filterByCurrency(
     searchQuery: string,
     countryData: NormalizedCountryArrayItem[],
@@ -37,6 +53,12 @@ export class Filter {
     );
   }
 
+  /**
+   * Filter country data by alpha2 code
+   * @param searchQuery - Query string for filtering by alpha2 code
+   * @param countryData - Array of normalized country data to filter
+   * @returns Filtered array of NormalizedCountryArrayItem
+   */
   private filterByAlpha2(
     searchQuery: string,
     countryData: NormalizedCountryArrayItem[],
@@ -46,6 +68,12 @@ export class Filter {
     );
   }
 
+  /**
+   * Filter country data by alpha3 code
+   * @param searchQuery - Query string for filtering by alpha3 code
+   * @param countryData - Array of normalized country data to filter
+   * @returns Filtered array of NormalizedCountryArrayItem
+   */
   private filterByAlpha3(
     searchQuery: string,
     countryData: NormalizedCountryArrayItem[],

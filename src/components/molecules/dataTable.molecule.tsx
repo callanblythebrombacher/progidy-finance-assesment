@@ -14,36 +14,44 @@ export const Table: React.FC<DataTableProps> = ({
   page,
   setPage,
 }) => {
+  // Refs array to hold SwipeableComponent refs
   const refsArray = useRef<
     (React.ElementRef<typeof SwipeableComponent> | null)[]
   >([]);
+
+  // State for number of items per page and initial values
   const [numberOfItemsPerPageList] = useState([15, 30, 60]);
   const [itemsPerPage, setItemsPerPage] = useState(numberOfItemsPerPageList[0]);
 
+  // Calculate range of rows to display based on pagination
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, tableRows.length);
 
+  // Effect to reset page to 0 when items per page changes
   useEffect(() => {
     setPage(0);
   }, [itemsPerPage]);
 
+  // State for screen height and update effect
   const screenHeight = Dimensions.get('window').height;
   const [height, setHeight] = useState(screenHeight);
 
   useEffect(() => {
+    // Update height state when screen dimensions change
     const updateHeight = ({window: {height}}: any) => {
       setHeight(height);
     };
     Dimensions.addEventListener('change', updateHeight);
   }, []);
 
+  // Function to render right swipe actions
   const renderRightActions = (rowData: any, index: number) => (
     <TouchableOpacity
       onPress={() => {
         if (refsArray.current[index]) {
-          refsArray.current[index]?.close(); // Ensure the ref exists before calling close()
+          refsArray.current[index]?.close(); // Close swipeable if ref exists
         }
-        handleDelete(rowData[0].item);
+        handleDelete(rowData[0].item); // Handle delete action
       }}
       style={styles.deleteButtonView}>
       <Icon source="delete" color="#fff" size={30} />
@@ -52,7 +60,7 @@ export const Table: React.FC<DataTableProps> = ({
 
   return (
     <DataTable style={styles.table}>
-      <TableHeader headerData={headerRow} />
+      <TableHeader headerData={headerRow} /> {/* Render table header */}
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={[styles.scrollView, {height: height - 150}]}>
@@ -61,7 +69,7 @@ export const Table: React.FC<DataTableProps> = ({
 
           return (
             <SwipeableComponent
-              ref={ref => (refsArray.current[index] = ref)}
+              ref={ref => (refsArray.current[index] = ref)} // Assign ref to SwipeableComponent
               key={index}
               renderRightActions={() => renderRightActions(row.data, index)}>
               {tableRow}

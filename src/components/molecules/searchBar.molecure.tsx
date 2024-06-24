@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {TextInput, View} from 'react-native';
 import {IconButton} from 'react-native-paper';
-import {AutocompleteAtom} from '../atoms/autocomplete.atom';
+import {Autocomplete} from '../atoms/autocomplete.atom';
 import {searchBarStyles as styles} from '../styles/molecules.styles';
 import {AutoCompleteData} from '../interfaces/atom.interfaces';
 import {SearchBarProps} from '../interfaces/molecules.interfaces';
@@ -14,8 +14,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   setAutoCompleteData,
   autoCompleteData,
 }) => {
+  // Handler for updating search query state
   const handleSearch = (text: string) => setSearchQuery(text);
 
+  // Function to filter searchData based on query
   const handleFilterSearch = (
     query: string,
     searchData: AutoCompleteData,
@@ -26,6 +28,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     );
   };
 
+  // Handler to clear search input and reset autocomplete data
   const handleClearInput = () => {
     setAutoCompleteData([]);
     setSearchQuery('');
@@ -33,10 +36,13 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   useEffect(() => {
-    if (!searchData) return; // Ensure searchData is not null or undefined
+    // Ensure searchData is available and not null/undefined
+    if (!searchData) return;
 
+    // Filter searchData based on searchQuery
     const filteredData = handleFilterSearch(searchQuery, searchData);
 
+    // Update autoCompleteData based on filtered results
     if (filteredData.length > 0 && searchQuery !== '') {
       setAutoCompleteData(filteredData);
     } else {
@@ -46,12 +52,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <View style={styles.container}>
+      {/* Search input field */}
       <TextInput
         style={styles.input}
         placeholder="Search"
         value={searchQuery}
         onChangeText={handleSearch}
       />
+      {/* Clear button shown when searchQuery is not empty */}
       {searchQuery !== '' && (
         <IconButton
           icon="close"
@@ -59,7 +67,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           style={styles.iconButton}
         />
       )}
-      <AutocompleteAtom autocompleteData={autoCompleteData} />
+      {/* Autocomplete suggestions */}
+      <Autocomplete autocompleteData={autoCompleteData} />
     </View>
   );
 };
