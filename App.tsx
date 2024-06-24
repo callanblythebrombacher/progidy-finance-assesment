@@ -6,17 +6,12 @@
  */
 
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  useColorScheme,
-} from 'react-native';
+import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
 import {Provider} from 'react-redux';
 import {store} from './src/redux/store.ts';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {PaperProvider} from 'react-native-paper';
-import CountryDataTable from './src/components/countryDataTable/table.tsx';
+import CountryDataTable from './src/components/screens/countryDataTable.screen.tsx';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 function App(): React.JSX.Element {

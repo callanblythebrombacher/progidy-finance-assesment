@@ -10,7 +10,7 @@ export const countryThunk = createAsyncThunk(
   async (arg: void, thunkAPI) => {
     try {
       const response = await axiosApi.initializeApiRequest('getCountryData');
-      const normalizedData = normalize.countryData(response.data);
+      const normalizedData = normalize.getCountryData(response.data);
       console.log(JSON.stringify(normalizedData, null, 2));
       return thunkAPI.fulfillWithValue(normalizedData);
     } catch (error) {
