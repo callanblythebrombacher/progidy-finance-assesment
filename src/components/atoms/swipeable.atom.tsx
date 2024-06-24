@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React from 'react';
 import {Swipeable} from 'react-native-gesture-handler';
 import {SwipeableComponentProps} from '../interfaces/atom.interfaces.ts';
 
