@@ -41,6 +41,6 @@ export const searchBarStyles = StyleSheet.create({
   iconButton: {
     position: 'absolute',
     right: 3,
-    top: 5,
+    top: 9,
   },
 });

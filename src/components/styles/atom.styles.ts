@@ -10,7 +10,7 @@ export const autoCompleteStyles = StyleSheet.create({
   autocompleteListContainer: {
     position: 'absolute',
     width: '100%',
-    top: 60, // Adjust as needed based on your layout
+    top: 65, // Adjust as needed based on your layout
     backgroundColor: '#fff',
     borderRadius: 5,
     elevation: 5, // Android shadow

@@ -29,7 +29,7 @@ export class Filter {
   ): NormalizedCountryArrayItem[] {
     return countryData.filter(country => {
       const matchArray: boolean[] = country.currencyArray.map(
-        currency => currency.currency === searchQuery,
+        currency => currency.name === searchQuery,
       );
       return matchArray.includes(true);
     });

@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React, {Dispatch, ReactNode, SetStateAction} from 'react';
 import {ItemType, ValueType} from 'react-native-dropdown-picker';
 
 export type AutoCompleteData = {

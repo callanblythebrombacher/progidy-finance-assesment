@@ -17,6 +17,8 @@ export interface DataTableProps {
   headerRow: HeaderData;
   tableRows: TableRows;
   handleDelete: (itemToDelete: string) => void;
+  page: number;
+  setPage: Dispatch<SetStateAction<number>>;
 }
 
 export interface SearchBarProps {
@@ -24,4 +26,6 @@ export interface SearchBarProps {
   clearFilteredSearch: () => void;
   searchQuery: string;
   setSearchQuery: Dispatch<SetStateAction<string>>;
+  setAutoCompleteData: Dispatch<SetStateAction<AutoCompleteData | undefined>>;
+  autoCompleteData: AutoCompleteData | undefined;
 }

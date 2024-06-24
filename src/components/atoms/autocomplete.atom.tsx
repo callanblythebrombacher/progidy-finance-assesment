@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Dimensions, FlatList, View} from 'react-native';
 import {List} from 'react-native-paper';
 import {autoCompleteStyles as styles} from '../styles/atom.styles.ts';
@@ -29,12 +29,21 @@ export const AutocompleteAtom: React.FC<AutoCompleteProps> = ({
       <List.Item
         style={styles.autoCompleteListItem}
         title={item.listTitle}
-        onPress={item.onPress}
+        onPress={() => {
+          item.onPress();
+        }}
       />
     );
   }
 
-  const windowHeight = Dimensions.get('window').height;
+  const screenHeight = Dimensions.get('window').height;
+  const [height, setHeight] = React.useState(screenHeight);
+
+  useEffect(() => {
+    Dimensions.addEventListener('change', ({window: {width, height}}) => {
+      setHeight(height);
+    });
+  }, []);
 
   return (
     <View
@@ -43,7 +52,7 @@ export const AutocompleteAtom: React.FC<AutoCompleteProps> = ({
         {
           height:
             autocompleteData !== undefined && autocompleteData.length > 0
-              ? windowHeight
+              ? height - 60
               : 0,
         },
       ]}>

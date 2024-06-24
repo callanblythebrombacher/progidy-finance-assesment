@@ -1,4 +1,4 @@
-import React, {ReactNode, useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import {FilterableDataTable} from '../templates/filterableDataTabled.template.tsx';
 import {TableConfig} from '../interfaces/templates.interface.ts';
 import {AppDispatch, RootState} from '../../redux/store.ts';
@@ -23,13 +23,17 @@ export default function CountryDataTable() {
   const [pickerList, setPickerList] = useState<AutoCompleteData | null>(null);
   const [rowData, setRowData] = useState<TableRows>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [autocompleteData, setAutoCompleteData] = useState<
+    AutoCompleteData | undefined
+  >([]);
+  const [page, setPage] = React.useState<number>(0);
 
   React.useEffect(() => {
     dispatch(countryThunk());
   }, []);
 
   React.useEffect(() => {
-    if (pickerValue !== null && countryData !== null) {
+    if (countryData !== null) {
       const searchListArray: string[] = normalize.getSearchList(
         pickerValue,
         countryData,
@@ -40,27 +44,36 @@ export default function CountryDataTable() {
           ...searchList,
           {
             listTitle,
-            onPress: handleItemPress,
+            onPress: () => {
+              handleItemPress(listTitle);
+            },
           },
         ];
       });
       setPickerList(searchList);
     }
-  }, [pickerValue]);
+  }, [pickerValue, countryData]);
 
   React.useEffect(() => {
     if (countryData !== null) {
       const rowConfig = normalize.getRowConfig(countryData);
       setRowData(rowConfig);
+      setPage(0);
     }
   }, [countryData]);
 
-  const handleItemPress = () => {
+  const handleItemPress = (listTitle: string) => {
+    setSearchQuery(listTitle);
     const filterdCountryData: NormalizedCountryArrayItem[] =
-      filter.getFilteredCountryData(pickerValue, searchQuery, countryData);
+      filter.getFilteredCountryData(pickerValue, listTitle, countryData);
     const rowConfig = normalize.getRowConfig(filterdCountryData);
     setRowData(rowConfig);
   };
+
+  useEffect(() => {
+    setAutoCompleteData([]);
+    setPage(0);
+  }, [rowData]);
 
   if (countryData !== null) {
     const handleClearFilter = () => {
@@ -78,6 +91,8 @@ export default function CountryDataTable() {
         searchQuery,
         setSearchQuery,
         clearFilteredSearch: handleClearFilter,
+        autoCompleteData: autocompleteData,
+        setAutoCompleteData: setAutoCompleteData,
       },
       pickerConfig: {
         items: [
@@ -94,6 +109,8 @@ export default function CountryDataTable() {
         {item: 'Currency', isNumeric: true},
       ],
       rowConfig: rowData,
+      page: page,
+      setPage: setPage,
     };
 
     return (

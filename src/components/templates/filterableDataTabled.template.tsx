@@ -8,7 +8,14 @@ import {filterableDataTableStyles as styles} from '../styles/templates.styles.ts
 export const FilterableDataTable: React.FC<
   FilterableDataTableTemplateProps
 > = ({tableConfig, handleDelete}) => {
-  const {searchBarConfig, pickerConfig, rowConfig, headerConfig} = tableConfig;
+  const {
+    page,
+    setPage,
+    searchBarConfig,
+    pickerConfig,
+    rowConfig,
+    headerConfig,
+  } = tableConfig;
   return (
     <View style={styles.wrapper}>
       <VariableSearchBar
@@ -16,6 +23,8 @@ export const FilterableDataTable: React.FC<
         pickerProps={pickerConfig}
       />
       <Table
+        page={page}
+        setPage={setPage}
         handleDelete={handleDelete}
         headerRow={headerConfig}
         tableRows={rowConfig}

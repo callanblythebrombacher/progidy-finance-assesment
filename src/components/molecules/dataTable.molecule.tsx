@@ -11,8 +11,9 @@ export const Table: React.FC<DataTableProps> = ({
   headerRow,
   tableRows,
   handleDelete,
+  page,
+  setPage,
 }) => {
-  const [page, setPage] = React.useState<number>(0);
   const [numberOfItemsPerPageList] = React.useState([15, 30, 60]);
   const [itemsPerPage, onItemsPerPageChange] = React.useState(
     numberOfItemsPerPageList[0],

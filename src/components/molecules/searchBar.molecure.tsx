@@ -11,11 +11,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   clearFilteredSearch,
   setSearchQuery,
   searchQuery,
+  setAutoCompleteData,
+  autoCompleteData,
 }) => {
-  const [autocompleteData, setAutocompleteData] = useState<
-    AutoCompleteData | undefined
-  >([]);
-
   const handleSearch = (text: string) => setSearchQuery(text);
 
   const handleFilterSearch = (
@@ -29,17 +27,18 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     );
   };
   const handleClearInput = () => {
-    setAutocompleteData([]);
+    setAutoCompleteData([]);
     setSearchQuery('');
     clearFilteredSearch();
   };
 
   useEffect(() => {
+    console.log(searchQuery, searchData);
     const filteredData = handleFilterSearch(searchQuery, searchData);
     if (filteredData.length > 0 && searchQuery !== '') {
-      setAutocompleteData(filteredData);
+      setAutoCompleteData(filteredData);
     } else {
-      setAutocompleteData(undefined);
+      setAutoCompleteData(undefined);
     }
   }, [searchQuery]);
 
@@ -58,7 +57,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           style={styles.iconButton}
         />
       )}
-      <AutocompleteAtom autocompleteData={autocompleteData} />
+      <AutocompleteAtom autocompleteData={autoCompleteData} />
     </View>
   );
 };
