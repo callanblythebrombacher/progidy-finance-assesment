@@ -60,7 +60,7 @@ export const Table: React.FC<DataTableProps> = ({
 
   return (
     <DataTable style={styles.table}>
-      <TableHeader headerData={headerRow} /> {/* Render table header */}
+      <TableHeader headerData={headerRow} />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={[styles.scrollView, {height: height - 150}]}>
