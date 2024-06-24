@@ -24,10 +24,12 @@ export const AutocompleteAtom: React.FC<AutoCompleteProps> = ({
 
   const screenHeight = Dimensions.get('window').height;
   const [height, setHeight] = useState(screenHeight);
+  const [width, setWidth] = useState(screenHeight);
 
   useEffect(() => {
-    const updateHeight = ({window: {height}}: any) => {
+    const updateHeight = ({window: {height, width}}: any) => {
       setHeight(height);
+      setWidth(width);
     };
     Dimensions.addEventListener('change', updateHeight);
   }, []);
@@ -38,7 +40,10 @@ export const AutocompleteAtom: React.FC<AutoCompleteProps> = ({
         styles.autocompleteListContainer,
         {
           height:
-            autocompleteData && autocompleteData.length > 0 ? height - 60 : 0,
+            autocompleteData && autocompleteData.length > 0
+              ? height - (height > width ? 100 : 80)
+              : 0,
+          width: width,
         },
       ]}>
       <FlatList

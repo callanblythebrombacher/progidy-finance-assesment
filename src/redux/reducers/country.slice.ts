@@ -14,7 +14,16 @@ export const countrySlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    softDelete(state, payload: PayloadAction<any>) {},
+    softDelete(state, action: PayloadAction<string>) {
+      const itemToSoftDelete = action.payload;
+      if (state.data) {
+        state.data = state.data.map(countryItem =>
+          countryItem.name === itemToSoftDelete
+            ? {...countryItem, isActive: false} // Update isActive property
+            : countryItem,
+        );
+      }
+    },
   },
   extraReducers: builder => {
     builder

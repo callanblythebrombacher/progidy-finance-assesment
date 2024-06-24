@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {DataTable, Icon} from 'react-native-paper';
 import {TableHeader} from '../atoms/tableHeader.atom';
 import {TableRow} from '../atoms/tablerow.atom';
@@ -14,6 +14,9 @@ export const Table: React.FC<DataTableProps> = ({
   page,
   setPage,
 }) => {
+  const refsArray = useRef<
+    (React.ElementRef<typeof SwipeableComponent> | null)[]
+  >([]);
   const [numberOfItemsPerPageList] = useState([15, 30, 60]);
   const [itemsPerPage, setItemsPerPage] = useState(numberOfItemsPerPageList[0]);
 
@@ -34,9 +37,14 @@ export const Table: React.FC<DataTableProps> = ({
     Dimensions.addEventListener('change', updateHeight);
   }, []);
 
-  const renderRightActions = (rowData: any) => (
+  const renderRightActions = (rowData: any, index: number) => (
     <TouchableOpacity
-      onPress={() => handleDelete(rowData[0].item)}
+      onPress={() => {
+        if (refsArray.current[index]) {
+          refsArray.current[index]?.close(); // Ensure the ref exists before calling close()
+        }
+        handleDelete(rowData[0].item);
+      }}
       style={styles.deleteButtonView}>
       <Icon source="delete" color="#fff" size={30} />
     </TouchableOpacity>
@@ -47,18 +55,17 @@ export const Table: React.FC<DataTableProps> = ({
       <TableHeader headerData={headerRow} />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        style={[styles.scrollView, {height: height - 220}]}>
+        style={[styles.scrollView, {height: height - 150}]}>
         {tableRows.slice(from, to).map((row, index) => {
           const tableRow = <TableRow key={index} cellData={row.data} />;
 
-          return row.isSwipeable ? (
+          return (
             <SwipeableComponent
+              ref={ref => (refsArray.current[index] = ref)}
               key={index}
-              renderRightActions={() => renderRightActions(row.data)}>
+              renderRightActions={() => renderRightActions(row.data, index)}>
               {tableRow}
             </SwipeableComponent>
-          ) : (
-            tableRow
           );
         })}
         <DataTable.Pagination

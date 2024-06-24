@@ -10,6 +10,7 @@ import {AutoCompleteData} from '../interfaces/atom.interfaces';
 import {TableRows} from '../interfaces/molecules.interfaces';
 import {AppDispatch, RootState} from '../../redux/store.ts';
 import {NormalizedCountryArrayItem} from '../../interfaces/normalize.interface.ts';
+import {softDelete} from '../../redux/reducers/country.slice.ts';
 
 const normalize = new Normalize();
 const filter = new Filter();
@@ -76,7 +77,7 @@ const CountryDataTable = () => {
   };
 
   const handleDelete = (itemToDelete: string) => {
-    console.log(`Deleting ${itemToDelete}`);
+    dispatch(softDelete(itemToDelete));
   };
 
   if (countryData) {

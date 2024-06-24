@@ -19,6 +19,7 @@ export interface NormalizedCurrencyArrayItem extends Currency {
 }
 
 export interface NormalizedCountryArrayItem {
+  isActive: boolean;
   name: string;
   flag: string;
   alpha2: string;

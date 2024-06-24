@@ -23,7 +23,7 @@ export const tableStyles = StyleSheet.create({
 export const searchBarStyles = StyleSheet.create({
   container: {
     backgroundColor: '#ffffff',
-    width: '100%',
+    width: 210,
     zIndex: 4,
   },
   input: {
@@ -31,16 +31,12 @@ export const searchBarStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#000000',
     padding: 10,
-    marginBottom: 20,
-    marginLeft: 10,
-    marginRight: 10,
-    marginTop: 10,
     backgroundColor: 'white',
     borderRadius: 8,
   },
   iconButton: {
     position: 'absolute',
     right: 3,
-    top: 9,
+    top: 0,
   },
 });

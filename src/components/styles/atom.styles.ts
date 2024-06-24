@@ -9,8 +9,7 @@ export const autoCompleteStyles = StyleSheet.create({
   },
   autocompleteListContainer: {
     position: 'absolute',
-    width: '100%',
-    top: 65, // Adjust as needed based on your layout
+    top: 61, // Adjust as needed based on your layout
     backgroundColor: '#fff',
     borderRadius: 5,
     elevation: 5, // Android shadow
@@ -18,6 +17,7 @@ export const autoCompleteStyles = StyleSheet.create({
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.8,
     shadowRadius: 2,
+    left: -10,
   },
 });
 
@@ -30,7 +30,6 @@ export const pickerStyles = StyleSheet.create({
   container: {
     zIndex: 3,
     marginLeft: 10,
-    marginRight: 10,
-    marginBottom: 2,
+    width: 140,
   },
 });
