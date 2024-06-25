@@ -16,14 +16,17 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   pickerValue,
   setRowData,
   setPage,
-  setSearchChanged,
 }) => {
+  // Redux selector to get country data
   const countryData = useSelector(
     (state: RootState) => state.countryReducer.data,
   );
 
+  // Custom hook for managing search functionality
   const {searchQuery, handleSearch, handleClearInput, setSearchQuery} =
     useSearch(propSearchQuery);
+
+  // Custom hook for managing autocomplete functionality
   const {autoCompleteData: filteredAutoCompleteData, handleItemSelection} =
     useAutocomplete(
       setSearchQuery,
@@ -33,7 +36,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       countryData,
       setRowData,
       setPage,
-      setSearchChanged,
     );
 
   return (
@@ -42,21 +44,21 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         style={styles.input}
         placeholder="Search"
         value={searchQuery}
-        onChangeText={handleSearch}
+        onChangeText={handleSearch} // Handle input change
       />
       {searchQuery !== '' && (
         <IconButton
           icon="close"
           onPress={() => {
-            handleClearInput();
-            clearFilteredSearch();
+            handleClearInput(); // Clear search input
+            clearFilteredSearch(); // Clear filtered search results
           }}
           style={styles.iconButton}
         />
       )}
       <Autocomplete
         autocompleteData={filteredAutoCompleteData}
-        onItemPress={handleItemSelection}
+        onItemPress={handleItemSelection} // Handle selection from autocomplete
       />
     </View>
   );
