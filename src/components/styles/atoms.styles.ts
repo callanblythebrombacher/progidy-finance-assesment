@@ -1,13 +1,13 @@
 import {StyleSheet} from 'react-native';
 
 export const autoCompleteStyles = StyleSheet.create({
-  autoCompleteListItem: {
+  item: {
     backgroundColor: 'white',
     borderBottomColor: '#e7e7e7',
     borderBottomWidth: 1,
     height: 60,
   },
-  autocompleteListContainer: {
+  container: {
     position: 'absolute',
     top: 61, // Adjust as needed based on your layout
     backgroundColor: '#fff',

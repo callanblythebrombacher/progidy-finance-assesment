@@ -1,6 +1,6 @@
 import React from 'react';
 import {Swipeable} from 'react-native-gesture-handler';
-import {SwipeableComponentProps} from '../interfaces/atom.interfaces'; // Remove '.ts' extension
+import {SwipeableComponentProps} from '../../interfaces/atom.interfaces.ts'; // Remove '.ts' extension
 
 export const SwipeableComponent = React.forwardRef<
   any,

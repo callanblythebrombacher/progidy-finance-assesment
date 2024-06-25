@@ -2,7 +2,7 @@ import {
   CountryDataItem,
   NormalizedCountryArrayItem,
 } from '../interfaces/normalize.interface';
-import {TableRows} from '../components/interfaces/molecules.interfaces';
+import {TableRows} from '../interfaces/molecules.interfaces.ts';
 
 export class Normalize {
   /**
@@ -105,24 +105,23 @@ export class Normalize {
   public getRowConfig(countryData: NormalizedCountryArrayItem[]): TableRows {
     let result: TableRows = [];
     countryData.forEach(country => {
-      if (country.isActive) {
-        const currencyString = country.currencyArray
-          .map(currency => currency.currency)
-          .join(', ');
+      const currencyString = country.currencyArray
+        .map(currency => currency.currency)
+        .join(', ');
 
-        // Add each country as a swipeable row to the table configuration
-        result = [
-          ...result,
-          {
-            isSwipeable: true,
-            data: [
-              {item: country.name, isNumeric: false},
-              {item: country.flag, isNumeric: true},
-              {item: currencyString, isNumeric: true},
-            ],
-          },
-        ];
-      }
+      // Add each country as a swipeable row to the table configuration
+      result = [
+        ...result,
+        {
+          isSwipeable: true,
+          data: [
+            {item: country.name, isNumeric: false},
+            {item: country.flag, isNumeric: true},
+            {item: currencyString, isNumeric: true},
+          ],
+          isActive: country.isActive,
+        },
+      ];
     });
     return result;
   }

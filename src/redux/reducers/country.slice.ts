@@ -9,6 +9,7 @@ const initialState: CountrySliceStateInterface = {
   data: null, // Initial state for country data is null
   error: null, // Initial state for error is null
   pending: false, // Initial state for pending is false
+  deletionEvent: false, // if a deletion event occurs this flag is used to prevent a pagination reset
 };
 
 // Create the country slice using createSlice from Redux Toolkit
@@ -20,6 +21,7 @@ export const countrySlice = createSlice({
     softDelete(state, action: PayloadAction<string>) {
       const itemToSoftDelete = action.payload; // Get payload from action
       if (state.data) {
+        state.deletionEvent = true;
         // Check if state.data exists
         state.data = state.data.map(
           countryItem =>
@@ -28,6 +30,9 @@ export const countrySlice = createSlice({
               : countryItem, // Return unchanged item for non-matching items
         );
       }
+    },
+    resetDeletionEvent(state) {
+      state.deletionEvent = false;
     },
   },
   // Extra reducers for handling async actions using createAsyncThunk
@@ -55,7 +60,7 @@ export const countrySlice = createSlice({
 });
 
 // Export action creators from the country slice
-export const {softDelete} = countrySlice.actions;
+export const {softDelete, resetDeletionEvent} = countrySlice.actions;
 
 // Selector function to retrieve country data from the Redux state
 export const selectCountryData = (state: RootState) =>

@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import {PickerProps} from '../interfaces/atom.interfaces.ts';
+import {PickerProps} from '../../interfaces/atom.interfaces.ts';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {View} from 'react-native';
-import {pickerStyles as styles} from '../styles/atom.styles.ts';
+import {pickerStyles as styles} from '../styles/atoms.styles.ts';
 
 export const PickerComponent: React.FC<PickerProps> = ({
   items,

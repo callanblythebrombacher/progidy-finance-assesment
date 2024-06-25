@@ -11,6 +11,7 @@ export type TableRows = {
   data: CellData;
   swipeableOnPress?: () => void;
   swipeableRenderItem?: ReactNode;
+  isActive: boolean;
 }[];
 
 export interface DataTableProps {
@@ -28,4 +29,7 @@ export interface SearchBarProps {
   setSearchQuery: Dispatch<SetStateAction<string>>;
   setAutoCompleteData: Dispatch<SetStateAction<AutoCompleteData | undefined>>;
   autoCompleteData: AutoCompleteData | undefined;
+  setRowData: Dispatch<SetStateAction<TableRows>>;
+  pickerValue: number;
+  setPage: Dispatch<SetStateAction<number>>;
 }

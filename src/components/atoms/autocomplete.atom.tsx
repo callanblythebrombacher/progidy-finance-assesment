@@ -1,58 +1,47 @@
-import React, {useEffect, useState} from 'react';
-import {Dimensions, FlatList, View} from 'react-native';
+import React from 'react';
+import {FlatList, View} from 'react-native';
 import {List} from 'react-native-paper';
-import {autoCompleteStyles as styles} from '../styles/atom.styles';
-import {AutoCompleteProps} from '../interfaces/atom.interfaces';
+import {autoCompleteStyles as styles} from '../styles/atoms.styles';
+import {AutoCompleteProps} from '../../interfaces/atom.interfaces.ts';
+import useScreenDimensions from '../../hooks/useScreenDimensions';
 
 export const Autocomplete: React.FC<AutoCompleteProps> = ({
   autocompleteData,
+  onItemPress,
 }) => {
-  // Function to render each item in the FlatList
+  const {height, width} = useScreenDimensions();
+
   const renderItem = ({
     item,
   }: {
-    item: {
-      listTitle: string;
-      onPress: () => void;
-    };
+    item: {listTitle: string; onPress: () => void};
   }) => (
     <List.Item
-      style={styles.autoCompleteListItem}
+      style={styles.item}
       title={item.listTitle}
-      onPress={item.onPress}
+      onPress={() => {
+        onItemPress(item.listTitle);
+        item.onPress();
+      }}
     />
   );
-
-  // State to manage screen dimensions
-  const screenHeight = Dimensions.get('window').height;
-  const [height, setHeight] = useState(screenHeight);
-  const [width, setWidth] = useState(screenHeight); // Should be 'screenWidth'
-
-  // Effect to update dimensions on screen change
-  useEffect(() => {
-    const updateHeight = ({window: {height, width}}: any) => {
-      setHeight(height);
-      setWidth(width);
-    };
-    Dimensions.addEventListener('change', updateHeight);
-  }, []);
 
   return (
     <View
       style={[
-        styles.autocompleteListContainer,
+        styles.container,
         {
           height:
             autocompleteData && autocompleteData.length > 0
-              ? height - (height > width ? 100 : 80) // Adjust height based on screen orientation
+              ? height - (height > width ? 100 : 80)
               : 0,
           width: width,
         },
       ]}>
       <FlatList
-        data={autocompleteData} // Data to be rendered in FlatList
-        renderItem={renderItem} // Render method for each item
-        keyExtractor={(item, index) => index.toString()} // Key extractor for FlatList
+        data={autocompleteData}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
       />
     </View>
   );

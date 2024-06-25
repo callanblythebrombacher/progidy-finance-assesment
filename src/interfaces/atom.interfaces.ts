@@ -8,6 +8,7 @@ export type AutoCompleteData = {
 }[];
 export interface AutoCompleteProps {
   autocompleteData: AutoCompleteData | undefined;
+  onItemPress: (itemTitle: string) => void;
 }
 
 export interface SwipeableComponentProps {
@@ -32,6 +33,7 @@ export type CellData = {
 
 export interface TableRowProps {
   cellData: CellData;
+  isActive: boolean;
 }
 
 export interface PickerProps {
