@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Table Component renders correctly with given props 1`] = `
+<View
+  style={
+    [
+      {
+        "width": "100%",
+      },
+      {
+        "flex": 1,
+        "position": "relative",
+        "zIndex": 1,
+      },
+    ]
+  }
+>
+  TableHeader
+  <RCTScrollView
+    contentInsetAdjustmentBehavior="automatic"
+    style={
+      [
+        {
+          "backgroundColor": "white",
+        },
+        {
+          "height": 576,
+        },
+      ]
+    }
+  >
+    <View>
+      TableRow
+    </View>
+  </RCTScrollView>
+</View>
+`;

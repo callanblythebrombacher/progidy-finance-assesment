@@ -5,65 +5,37 @@
  * @format
  */
 
-import React, {useEffect, useState} from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import React from 'react';
+import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
 import {Provider} from 'react-redux';
 import {store} from './src/redux/store.ts';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {PaperProvider} from 'react-native-paper';
-import {CountryData} from './src/components/countryData.tsx';
+import CountryDataTable from './src/components/screens/countryDataTable.screen.tsx';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    flex: 1,
   };
 
   return (
     <Provider store={store}>
-      <PaperProvider>
-        <SafeAreaView style={backgroundStyle}>
-          <StatusBar
-            barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-            backgroundColor={backgroundStyle.backgroundColor}
-          />
-          <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
-            style={backgroundStyle}>
-            <CountryData />
-          </ScrollView>
-        </SafeAreaView>
-      </PaperProvider>
+      <GestureHandlerRootView style={{flex: 1}}>
+        <PaperProvider>
+          <SafeAreaView style={backgroundStyle}>
+            <StatusBar
+              barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+              backgroundColor={backgroundStyle.backgroundColor}
+            />
+            <CountryDataTable />
+          </SafeAreaView>
+        </PaperProvider>
+      </GestureHandlerRootView>
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;

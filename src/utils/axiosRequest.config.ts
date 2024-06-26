@@ -2,11 +2,11 @@ import {AxiosRequestConfigInterface} from '../interfaces/AxiosRequestConfig.inte
 
 export const AxiosRequestConfigs: AxiosRequestConfigInterface = {
   getCountryData: {
-    method: 'GET',
-    url: 'https://rest-countries10.p.rapidapi.com/countries',
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: 'https://restcountries.com/v3.1/all?fields=name,currencies,cca2,cca3,flag',
     headers: {
-      'x-rapidapi-key': '8e668d8bc2msh5ddca4aa5b3b4abp1d571ejsnf800fa6f561b',
-      'x-rapidapi-host': 'rest-countries10.p.rapidapi.com',
+      'Content-Type': 'application/json',
     },
   },
 };

@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchBar Component renders correctly with given props 1`] = `
+<View
+  style={
+    {
+      "backgroundColor": "#ffffff",
+      "width": 210,
+      "zIndex": 4,
+    }
+  }
+>
+  <TextInput
+    onChangeText={[MockFunction]}
+    placeholder="Search"
+    style={
+      {
+        "backgroundColor": "white",
+        "borderColor": "#000000",
+        "borderRadius": 8,
+        "borderWidth": 1,
+        "height": 50,
+        "padding": 10,
+      }
+    }
+    value=""
+  />
+  Autocomplete
+</View>
+`;
