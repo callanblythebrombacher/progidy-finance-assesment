@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {DataTable, Icon} from 'react-native-paper';
 import {TableHeader} from '../atoms/tableHeader.atom';
-import {TableRow} from '../atoms/tablerow.atom';
+import {TableRow} from '../atoms/tableRow.atom.tsx';
 import {ScrollView, TouchableOpacity} from 'react-native';
 import {SwipeableComponent} from '../atoms/swipeable.atom';
 import {tableStyles as styles} from '../styles/molecules.styles';
