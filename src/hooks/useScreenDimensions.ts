@@ -26,7 +26,6 @@ const useScreenDimensions = (): ScreenDimensions => {
     // Add event listener to listen for screen dimension changes
     Dimensions.addEventListener('change', updateScreenDimensions);
   }, []); // Empty dependency array ensures effect runs only once on component mount
-
   return screenDimensions;
 };
 

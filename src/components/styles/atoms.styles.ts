@@ -22,7 +22,7 @@ export const autoCompleteStyles = StyleSheet.create({
 });
 
 export const tableStyles = StyleSheet.create({
-  tableHeader: {backgroundColor: '#dddddd', width: '100%'},
+  tableHeader: {backgroundColor: '#dddddd', width: '100%', height: 50},
   tableRow: {height: 70, backgroundColor: 'white'},
 });
 

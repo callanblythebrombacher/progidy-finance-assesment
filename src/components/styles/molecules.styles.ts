@@ -3,7 +3,7 @@ export const tableStyles = StyleSheet.create({
   table: {
     position: 'relative',
     zIndex: 1,
-    top: 10,
+    flex: 1,
   },
   scrollView: {
     backgroundColor: 'white',
@@ -16,7 +16,8 @@ export const tableStyles = StyleSheet.create({
   },
   pagination: {
     justifyContent: 'center',
-    alignItems: 'center',
+    alignContent: 'center',
+    padding: 10,
   },
 });
 

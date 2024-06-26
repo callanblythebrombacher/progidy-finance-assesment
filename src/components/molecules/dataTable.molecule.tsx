@@ -23,6 +23,7 @@ export const Table: React.FC<DataTableProps> = ({
   // Custom hooks
   const refsArray = useSwipeableRefs(); // Hook to manage swipeable item refs
   const screenHeight = useScreenDimensions().height; // Hook to get screen height
+  const screenWidth = useScreenDimensions().width; // Hook to get screen height
   const {from, to, numberOfItemsPerPageList, itemsPerPage, setItemsPerPage} =
     usePagination(tableRows.length, page); // Hook to manage pagination state
 
@@ -59,7 +60,19 @@ export const Table: React.FC<DataTableProps> = ({
       <TableHeader headerData={headerRow} />
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
-        style={[styles.scrollView, {height: screenHeight - 150}]}>
+        style={[
+          styles.scrollView,
+          {
+            height:
+              screenWidth > 500
+                ? screenHeight > screenWidth
+                  ? screenHeight - 304
+                  : screenHeight - 204
+                : screenHeight > screenWidth
+                ? screenHeight - 280
+                : screenHeight - 224,
+          },
+        ]}>
         {tableRows.slice(from, to).map((row, index) => {
           const tableRow = (
             <TableRow key={index} cellData={row.data} isActive={row.isActive} />
@@ -75,8 +88,24 @@ export const Table: React.FC<DataTableProps> = ({
             </SwipeableComponent>
           );
         })}
+        {screenHeight < screenWidth && (
+          <DataTable.Pagination
+            style={[styles.pagination, {height: screenWidth > 500 ? 80 : 120}]}
+            page={page}
+            numberOfPages={Math.ceil(tableRows.length / itemsPerPage)}
+            onPageChange={page => setPage(page)}
+            label={`${from + 1}-${to} of ${tableRows.length}`}
+            numberOfItemsPerPageList={numberOfItemsPerPageList}
+            numberOfItemsPerPage={itemsPerPage}
+            onItemsPerPageChange={setItemsPerPage}
+            showFastPaginationControls
+            selectPageDropdownLabel="Rows per page"
+          />
+        )}
+      </ScrollView>
+      {screenHeight > screenWidth && (
         <DataTable.Pagination
-          style={styles.pagination}
+          style={[styles.pagination, {height: screenWidth > 500 ? 80 : 120}]}
           page={page}
           numberOfPages={Math.ceil(tableRows.length / itemsPerPage)}
           onPageChange={page => setPage(page)}
@@ -87,7 +116,7 @@ export const Table: React.FC<DataTableProps> = ({
           showFastPaginationControls
           selectPageDropdownLabel="Rows per page"
         />
-      </ScrollView>
+      )}
     </DataTable>
   );
 };
