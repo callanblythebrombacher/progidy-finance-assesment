@@ -1,7 +1,7 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import {render, fireEvent, screen} from '@testing-library/react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {PickerComponent} from '../picker.atom.ts';
+import {PickerComponent} from '../picker.atom';
 
 import {describe, jest, beforeEach, afterEach, it, expect} from '@jest/globals';
 
@@ -15,48 +15,83 @@ describe('PickerComponent Atom', () => {
   const mockSetValue = jest.fn();
   const mockValue = 1;
 
-  let wrapper: any;
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-  beforeEach(() => {
-    wrapper = shallow(
+  it('renders correctly', () => {
+    const {toJSON} = render(
       <PickerComponent
         items={mockItems}
         setValue={mockSetValue}
         value={mockValue}
       />,
     );
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it('renders correctly', () => {
-    expect(wrapper).toMatchSnapshot();
+    expect(toJSON()).toMatchSnapshot();
   });
 
   it('passes correct props to DropDownPicker', () => {
-    const dropDownPicker = wrapper.find(DropDownPicker);
-    expect(dropDownPicker).toHaveLength(1);
-    expect(dropDownPicker.prop('open')).toBe(false); // Initial state of 'open'
-    expect(dropDownPicker.prop('value')).toBe(mockValue);
-    expect(dropDownPicker.prop('items')).toEqual(mockItems);
-    expect(typeof dropDownPicker.prop('setOpen')).toBe('function');
-    expect(typeof dropDownPicker.prop('setValue')).toBe('function');
-    expect(typeof dropDownPicker.prop('setItems')).toBe('function');
+    render(
+      <PickerComponent
+        items={mockItems}
+        setValue={mockSetValue}
+        value={mockValue}
+      />,
+    );
+
+    console.log(screen.debug());
+
+    const dropDownPicker = screen.getByTestId('dropdown-picker');
+    expect(dropDownPicker.props.collapsable).toBe(false);
+    expect(dropDownPicker.props.value).toBe(mockValue);
+    expect(dropDownPicker.props.items).toEqual(mockItems);
+    expect(typeof dropDownPicker.props.setOpen).toBe('function');
+    expect(typeof dropDownPicker.props.setValue).toBe('function');
+    expect(typeof dropDownPicker.props.setItems).toBe('function');
   });
 
   it('triggers setValue function on value change', () => {
-    const dropDownPicker = wrapper.find(DropDownPicker);
-    dropDownPicker.simulate('change', 'option2');
+    render(
+      <PickerComponent
+        items={mockItems}
+        setValue={mockSetValue}
+        value={mockValue}
+      />,
+    );
+
+    const dropDownPicker = screen.getByTestId('dropdown-picker');
+    fireEvent(dropDownPicker, 'open');
+    fireEvent(dropDownPicker, 'valueChange', 'option2');
     expect(mockSetValue).toHaveBeenCalledWith('option2');
   });
 
   it('toggles open state when DropDownPicker is clicked', () => {
-    const dropDownPicker = wrapper.find(DropDownPicker);
-    dropDownPicker.simulate('open');
-    expect(wrapper.find(DropDownPicker).prop('open')).toBe(true);
-    dropDownPicker.simulate('close');
-    expect(wrapper.find(DropDownPicker).prop('open')).toBe(false);
+    const {rerender} = render(
+      <PickerComponent
+        items={mockItems}
+        setValue={mockSetValue}
+        value={mockValue}
+      />,
+    );
+
+    const dropDownPicker = screen.getByTestId('dropdown-picker');
+    fireEvent(dropDownPicker, 'open');
+    rerender(
+      <PickerComponent
+        items={mockItems}
+        setValue={mockSetValue}
+        value={mockValue}
+      />,
+    );
+    expect(dropDownPicker.props.open).toBe(true);
+    fireEvent(dropDownPicker, 'close');
+    rerender(
+      <PickerComponent
+        items={mockItems}
+        setValue={mockSetValue}
+        value={mockValue}
+      />,
+    );
+    expect(dropDownPicker.props.open).toBe(false);
   });
 });

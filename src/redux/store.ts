@@ -1,10 +1,13 @@
-import {configureStore} from '@reduxjs/toolkit';
+import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import countryReducer from './reducers/country.slice.ts';
 
+export const rootReducer = combineReducers({
+  countryReducer,
+  // Add other reducers as needed
+});
+
 export const store = configureStore({
-  reducer: {
-    countryReducer,
-  },
+  reducer: rootReducer,
   middleware: getDefaultMiddleware => {
     return getDefaultMiddleware({
       serializableCheck: false,

@@ -1,14 +1,13 @@
 import React from 'react';
-import {shallow} from 'enzyme';
-import {FlatList, View} from 'react-native';
-import {List} from 'react-native-paper';
-import {Autocomplete} from '../autocomplete.atom.tsx';
+import {render, fireEvent, waitFor} from '@testing-library/react-native';
+import {Autocomplete} from '../autocomplete.atom';
 
 import {jest, describe, expect, beforeEach, afterEach, it} from '@jest/globals';
 
-jest.mock('../src/hooks/useScreenDimensions', () => ({
+const mockDefault = jest.fn().mockReturnValue({height: 800, width: 600});
+jest.mock('../../../hooks/useScreenDimensions', () => ({
   __esModule: true,
-  default: jest.fn().mockReturnValue({height: 800, width: 600}), // Mock useScreenDimensions hook return values
+  default: mockDefault, // Mock useScreenDimensions hook return values
 }));
 
 describe('Autocomplete Component', () => {
@@ -20,50 +19,69 @@ describe('Autocomplete Component', () => {
 
   const mockOnItemPress = jest.fn();
 
-  let wrapper: any;
-
-  beforeEach(() => {
-    wrapper = shallow(
-      <Autocomplete
-        autocompleteData={mockAutocompleteData}
-        onItemPress={mockOnItemPress}
-      />,
-    );
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it('renders correctly', () => {
-    expect(wrapper).toMatchSnapshot();
+    const {toJSON} = render(
+      <Autocomplete
+        autocompleteData={mockAutocompleteData}
+        onItemPress={mockOnItemPress}
+      />,
+    );
+    expect(toJSON()).toMatchSnapshot();
   });
 
   it('renders FlatList with correct props', () => {
-    const flatList = wrapper.find(FlatList);
-    expect(flatList).toHaveLength(1);
-    expect(flatList.prop('data')).toEqual(mockAutocompleteData);
-    expect(flatList.prop('keyExtractor')).toBeInstanceOf(Function);
-    expect(flatList.prop('renderItem')).toBeInstanceOf(Function);
+    const {getByTestId} = render(
+      <Autocomplete
+        autocompleteData={mockAutocompleteData}
+        onItemPress={mockOnItemPress}
+      />,
+    );
+
+    const flatList = getByTestId('autocomplete-flatlist');
+    expect(flatList).toBeTruthy();
+    expect(flatList.props.data).toEqual(mockAutocompleteData);
+    expect(flatList.props.keyExtractor).toBeInstanceOf(Function);
+    expect(flatList.props.renderItem).toBeInstanceOf(Function);
   });
 
   it('calls onItemPress and item onPress functions when ListItem is pressed', () => {
-    const listItem = wrapper.find(List.Item).first();
-    listItem.simulate('press');
+    const {getAllByTestId} = render(
+      <Autocomplete
+        autocompleteData={mockAutocompleteData}
+        onItemPress={mockOnItemPress}
+      />,
+    );
+
+    const listItem = getAllByTestId('autocomplete-list-item')[0];
+    fireEvent.press(listItem);
+
     expect(mockOnItemPress).toHaveBeenCalledWith('Item 1');
     expect(mockAutocompleteData[0].onPress).toHaveBeenCalled();
   });
 
   it('adjusts container height based on autocompleteData length', () => {
-    // Initial height when autocompleteData is not empty
-    expect(wrapper.find(View).prop('style')).toEqual([
+    const {getByTestId, rerender} = render(
+      <Autocomplete
+        autocompleteData={mockAutocompleteData}
+        onItemPress={mockOnItemPress}
+      />,
+    );
+
+    const container = getByTestId('autocomplete-container');
+    expect(container.props.style).toEqual([
       expect.objectContaining({height: 700}), // Adjusted height calculation based on mock screen dimensions
       expect.objectContaining({width: 600}),
     ]);
 
     // Simulate empty autocompleteData
-    wrapper.setProps({autocompleteData: []});
-    expect(wrapper.find(View).prop('style')).toEqual([
+    rerender(
+      <Autocomplete autocompleteData={[]} onItemPress={mockOnItemPress} />,
+    );
+    expect(container.props.style).toEqual([
       expect.objectContaining({height: 0}),
       expect.objectContaining({width: 600}),
     ]);

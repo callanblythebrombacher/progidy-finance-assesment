@@ -1,10 +1,9 @@
 import React from 'react';
-import {shallow} from 'enzyme';
-import {DataTable} from 'react-native-paper';
-import {TableHeader} from '../tableHeader.atom.tsx';
-import {tableStyles as styles} from '../../styles/atoms.styles.ts';
+import {render} from '@testing-library/react-native';
+import {TableHeader} from '../tableHeader.atom';
+import {tableStyles as styles} from '../../styles/atoms.styles';
 
-import {describe, jest, beforeEach, afterEach, expect, it} from '@jest/globals';
+import {describe, it, expect} from '@jest/globals';
 
 describe('TableHeader Atom', () => {
   const mockHeaderData = [
@@ -13,36 +12,25 @@ describe('TableHeader Atom', () => {
     {item: 'City', isNumeric: false},
   ];
 
-  let wrapper: any;
-
-  beforeEach(() => {
-    wrapper = shallow(<TableHeader headerData={mockHeaderData} />);
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('renders correctly', () => {
-    expect(wrapper).toMatchSnapshot();
+    const {toJSON} = render(<TableHeader headerData={mockHeaderData} />);
+    expect(toJSON()).toMatchSnapshot();
   });
 
   it('renders DataTable.Header component', () => {
-    const dataTableHeader = wrapper.find(DataTable.Header);
-    expect(dataTableHeader).toHaveLength(1);
-    expect(dataTableHeader.prop('style')).toEqual(
-      expect.objectContaining(styles.tableHeader),
-    );
+    const {getByTestId} = render(<TableHeader headerData={mockHeaderData} />);
+    const dataTableHeader = getByTestId('data-table-header');
+    expect(dataTableHeader).toBeTruthy();
+    expect(dataTableHeader.props.style).toEqual(styles.tableHeader);
   });
 
   it('renders DataTable.Title components with correct props', () => {
-    const dataTableTitles = wrapper.find(DataTable.Title);
-    expect(dataTableTitles).toHaveLength(mockHeaderData.length);
+    const {getByText} = render(<TableHeader headerData={mockHeaderData} />);
 
-    mockHeaderData.forEach((header, index) => {
-      const dataTableTitle = dataTableTitles.at(index);
-      expect(dataTableTitle.prop('numeric')).toBe(header.isNumeric);
-      expect(dataTableTitle.children().text()).toBe(header.item);
+    mockHeaderData.forEach(header => {
+      const dataTableTitle = getByText(header.item);
+      expect(dataTableTitle).toBeTruthy();
+      expect(dataTableTitle.props.numeric).toBe(header.isNumeric);
     });
   });
 });

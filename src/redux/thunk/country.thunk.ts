@@ -14,6 +14,7 @@ export const countryThunk = createAsyncThunk(
       // Try to make an API request to fetch country data
       const response = await axiosApi.initializeApiRequest('getCountryData'); // Use AxiosApi instance to fetch data
       const normalizedData = normalize.getCountryData(response.data); // Normalize fetched data using Normalize class
+      console.log(normalizedData);
       return thunkAPI.fulfillWithValue(normalizedData); // Return fulfilled action with normalized data
     } catch (error) {
       // Catch any errors that occur during API request or normalization

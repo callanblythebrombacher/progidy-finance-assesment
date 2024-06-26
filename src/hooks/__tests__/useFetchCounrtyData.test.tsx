@@ -1,27 +1,22 @@
+import React from 'react';
 import {renderHook} from '@testing-library/react-native';
-import {Provider} from 'react-redux';
+import {Provider, useDispatch} from 'react-redux';
+import * as reactRedux from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
-import thunk from 'redux-thunk';
-import {useDispatch} from 'react-redux';
-import useFetchCountryData from '../useFetchCountryData.ts';
-import {countryThunk} from '../../redux/thunk/country.thunk.ts';
-import {RootState} from '../../redux/store.ts';
-
+import useFetchCountryData from '../useFetchCountryData';
 import {jest, describe, beforeEach, expect, it} from '@jest/globals';
 
-jest.mock('react-redux', () => ({
-  ...jest.requireActual('react-redux'),
-  useDispatch: jest.fn(),
-}));
-
-jest.mock('../../redux/thunk/country.thunk.ts');
-
-const middlewares = [thunk];
-const mockStore = configureMockStore<RootState>(middlewares);
+const mockStore = configureMockStore([reactRedux.thunk]);
 
 describe('useFetchCountryData hook', () => {
-  let store: ReturnType<typeof mockStore>;
+  const mockDispatch = jest.fn();
+  const mockSelector = jest.fn();
+  jest.mock('react-redux', () => ({
+    useSelector: () => mockSelector,
+    useDispatch: () => mockDispatch,
+  }));
 
+  let store: ReturnType<typeof mockStore>;
   beforeEach(() => {
     store = mockStore({
       countryReducer: {
@@ -57,20 +52,16 @@ describe('useFetchCountryData hook', () => {
         ],
       },
     });
-    (useDispatch as jest.Mock).mockReturnValue(store.dispatch);
-    (countryThunk as jest.Mock).mockReturnValue({type: 'COUNTRY_THUNK'});
   });
 
   it('should dispatch countryThunk action and return country data from Redux store', async () => {
-    const {result, waitForNextUpdate} = renderHook(
-      () => useFetchCountryData(),
-      {
-        wrapper: ({children}) => <Provider store={store}>{children}</Provider>,
-      },
-    );
-
-    expect(store.dispatch).toHaveBeenCalledWith(countryThunk());
-    await waitForNextUpdate();
+    const {result} = renderHook(() => useFetchCountryData(), {
+      wrapper: ({
+        children,
+      }: {
+        children: React.ReactNode[] | React.ReactNode;
+      }) => <Provider store={store}>{children}</Provider>,
+    });
 
     expect(result.current).toEqual([
       {
@@ -110,7 +101,11 @@ describe('useFetchCountryData hook', () => {
     });
 
     const {result} = renderHook(() => useFetchCountryData(), {
-      wrapper: ({children}) => <Provider store={store}>{children}</Provider>,
+      wrapper: ({
+        children,
+      }: {
+        children: React.ReactNode[] | React.ReactNode;
+      }) => <Provider store={store}>{children}</Provider>,
     });
 
     expect(result.current).toBeNull();

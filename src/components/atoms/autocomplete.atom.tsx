@@ -25,6 +25,7 @@ export const Autocomplete: React.FC<AutoCompleteProps> = ({
     item: {listTitle: string; onPress: () => void};
   }) => (
     <List.Item
+      testID="autocomplete-list-item"
       style={styles.item}
       title={item.listTitle}
       onPress={() => {
@@ -36,6 +37,7 @@ export const Autocomplete: React.FC<AutoCompleteProps> = ({
 
   return (
     <View
+      testID="autocomplete-container"
       style={[
         styles.container,
         {

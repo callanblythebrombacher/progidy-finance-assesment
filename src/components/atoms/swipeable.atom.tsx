@@ -8,6 +8,7 @@ export const SwipeableComponent = React.forwardRef<
 >(({children, renderRightActions, friction, rightThreshold}, ref) => {
   return (
     <Swipeable
+      testID="swipeable-component"
       ref={ref}
       renderRightActions={renderRightActions}
       friction={friction ?? 2}

@@ -4,23 +4,21 @@ import axios from 'axios';
 import {Normalize} from '../../../utils/normalize.ts';
 import countryReducer from '../../reducers/country.slice.ts';
 
-import {jest, describe, expect, beforeEach, it} from '@jest/globals';
+import {beforeEach, describe, expect, it, jest} from '@jest/globals';
 
 jest.mock('axios');
-jest.mock('../src/utils/normalize.ts');
 
 const mockAxios = axios as jest.Mocked<typeof axios>;
-const mockNormalize = new Normalize() as jest.Mocked<Normalize>;
-
 describe('countryThunk', () => {
-  const store = configureStore({
-    reducer: {
-      country: countryReducer,
-    },
-  });
+  let store: any;
 
   beforeEach(() => {
     jest.clearAllMocks();
+    store = configureStore({
+      reducer: {
+        country: countryReducer,
+      },
+    });
   });
 
   it('dispatches fulfilled action with normalized data when API call succeeds', async () => {
@@ -62,16 +60,17 @@ describe('countryThunk', () => {
         ],
       },
     ];
-
+    Normalize.prototype.getCountryData = jest
+      .fn()
+      .mockReturnValue(normalizedData);
     mockAxios.request.mockResolvedValue(mockResponse);
-    mockNormalize.getCountryData.mockReturnValue(normalizedData);
 
-    await store.dispatch(countryThunk());
-
-    const actions = store.getActions();
-    expect(actions[0].type).toBe('country/fetch/pending');
-    expect(actions[1].type).toBe('country/fetch/fulfilled');
-    expect(actions[1].payload).toEqual(normalizedData);
+    await store.dispatch(countryThunk()).then(() => {
+      const state = store.getState();
+      expect(state.country.pending).toBe(false);
+      expect(state.country.error).toBeNull();
+      expect(state.country.data).toEqual(normalizedData);
+    });
   });
 
   it('dispatches rejected action with error message when API call fails', async () => {
@@ -80,9 +79,9 @@ describe('countryThunk', () => {
 
     await store.dispatch(countryThunk());
 
-    const actions = store.getActions();
-    expect(actions[0].type).toBe('country/fetch/pending');
-    expect(actions[1].type).toBe('country/fetch/rejected');
-    expect(actions[1].error.message).toBe('Network Error');
+    const state = store.getState();
+    expect(state.country.pending).toBe(false);
+    expect(state.country.error).toBe('Network Error');
+    expect(state.country.data).toEqual(null);
   });
 });

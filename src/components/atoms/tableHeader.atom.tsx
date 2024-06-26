@@ -4,7 +4,7 @@ import {tableStyles as styles} from '../styles/atoms.styles.ts';
 import {TableHeaderProps} from '../../interfaces/atom.interfaces.ts';
 export const TableHeader: React.FC<TableHeaderProps> = ({headerData}) => {
   return (
-    <DataTable.Header style={styles.tableHeader}>
+    <DataTable.Header testID="data-table-header" style={styles.tableHeader}>
       {headerData.map(({item, isNumeric}, index) => (
         <DataTable.Title key={index} numeric={isNumeric ? true : undefined}>
           {item}

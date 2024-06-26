@@ -11,10 +11,10 @@ export const PickerComponent: React.FC<PickerProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [selectItems, setSelectItems] = useState(items);
-
   return (
     <View style={styles.container}>
       <DropDownPicker
+        testID="dropdown-picker"
         open={open}
         value={value}
         items={selectItems}

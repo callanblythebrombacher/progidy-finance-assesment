@@ -1,7 +1,6 @@
 import React from 'react';
-import {shallow} from 'enzyme';
-import {Swipeable} from 'react-native-gesture-handler';
-import {SwipeableComponent} from '../swipeable.atom.tsx';
+import {render} from '@testing-library/react-native';
+import {SwipeableComponent} from '../swipeable.atom';
 
 import {describe, beforeEach, afterEach, jest, it, expect} from '@jest/globals';
 
@@ -11,10 +10,12 @@ describe('SwipeableComponent Atom', () => {
   const mockFriction = 2;
   const mockRightThreshold = 40;
 
-  let wrapper: any;
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-  beforeEach(() => {
-    wrapper = shallow(
+  it('renders correctly', () => {
+    const {toJSON} = render(
       <SwipeableComponent
         renderRightActions={mockRenderRightActions}
         friction={mockFriction}
@@ -22,25 +23,36 @@ describe('SwipeableComponent Atom', () => {
         {mockChildren}
       </SwipeableComponent>,
     );
-  });
-
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it('renders correctly', () => {
-    expect(wrapper).toMatchSnapshot();
+    expect(toJSON()).toMatchSnapshot();
   });
 
   it('renders Swipeable component with correct props', () => {
-    const swipeable = wrapper.find(Swipeable);
-    expect(swipeable).toHaveLength(1);
-    expect(swipeable.prop('renderRightActions')).toBe(mockRenderRightActions);
-    expect(swipeable.prop('friction')).toBe(mockFriction);
-    expect(swipeable.prop('rightThreshold')).toBe(mockRightThreshold);
+    const {getByTestId} = render(
+      <SwipeableComponent
+        renderRightActions={mockRenderRightActions}
+        friction={mockFriction}
+        rightThreshold={mockRightThreshold}>
+        {mockChildren}
+      </SwipeableComponent>,
+    );
+
+    const swipeable = getByTestId('swipeable-component');
+    expect(swipeable.props.renderRightActions).toBe(mockRenderRightActions);
+    expect(swipeable.props.friction).toBe(mockFriction);
+    expect(swipeable.props.rightThreshold).toBe(mockRightThreshold);
   });
 
   it('renders children inside Swipeable component', () => {
-    expect(wrapper.contains(mockChildren)).toBe(true);
+    const {getByText} = render(
+      <SwipeableComponent
+        renderRightActions={mockRenderRightActions}
+        friction={mockFriction}
+        rightThreshold={mockRightThreshold}>
+        {mockChildren}
+      </SwipeableComponent>,
+    );
+
+    const swipeableContent = getByText('Swipeable Content');
+    expect(swipeableContent).toBeTruthy();
   });
 });
