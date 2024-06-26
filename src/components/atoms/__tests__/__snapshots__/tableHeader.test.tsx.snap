@@ -1,0 +1,270 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TableHeader Atom renders correctly 1`] = `
+<View
+  style={
+    [
+      {
+        "borderBottomWidth": 1,
+        "flexDirection": "row",
+        "paddingHorizontal": 16,
+      },
+      {
+        "borderBottomColor": "rgba(231, 224, 236, 1)",
+      },
+      {
+        "backgroundColor": "#dddddd",
+        "height": 50,
+        "width": "100%",
+      },
+    ]
+  }
+  testID="data-table-header"
+>
+  <View
+    accessibilityState={
+      {
+        "busy": undefined,
+        "checked": undefined,
+        "disabled": true,
+        "expanded": undefined,
+        "selected": undefined,
+      }
+    }
+    accessibilityValue={
+      {
+        "max": undefined,
+        "min": undefined,
+        "now": undefined,
+        "text": undefined,
+      }
+    }
+    accessible={true}
+    collapsable={false}
+    focusable={true}
+    onBlur={[Function]}
+    onClick={[Function]}
+    onFocus={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      [
+        {
+          "alignContent": "center",
+          "flex": 1,
+          "flexDirection": "row",
+          "paddingVertical": 12,
+        },
+        undefined,
+        undefined,
+      ]
+    }
+  >
+    <Text
+      numberOfLines={1}
+      style={
+        [
+          {
+            "textAlign": "left",
+          },
+          {
+            "color": "rgba(28, 27, 31, 1)",
+            "fontFamily": "System",
+            "fontWeight": "400",
+            "letterSpacing": 0,
+          },
+          {
+            "writingDirection": "ltr",
+          },
+          [
+            {
+              "alignItems": "center",
+              "fontSize": 12,
+              "fontWeight": "500",
+              "lineHeight": 24,
+            },
+            {
+              "maxHeight": 24,
+            },
+            {},
+            {
+              "color": "rgba(28, 27, 31, 0.6)",
+            },
+            undefined,
+          ],
+        ]
+      }
+    >
+      Name
+    </Text>
+  </View>
+  <View
+    accessibilityState={
+      {
+        "busy": undefined,
+        "checked": undefined,
+        "disabled": true,
+        "expanded": undefined,
+        "selected": undefined,
+      }
+    }
+    accessibilityValue={
+      {
+        "max": undefined,
+        "min": undefined,
+        "now": undefined,
+        "text": undefined,
+      }
+    }
+    accessible={true}
+    collapsable={false}
+    focusable={true}
+    onBlur={[Function]}
+    onClick={[Function]}
+    onFocus={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      [
+        {
+          "alignContent": "center",
+          "flex": 1,
+          "flexDirection": "row",
+          "paddingVertical": 12,
+        },
+        {
+          "justifyContent": "flex-end",
+        },
+        undefined,
+      ]
+    }
+  >
+    <Text
+      numberOfLines={1}
+      style={
+        [
+          {
+            "textAlign": "left",
+          },
+          {
+            "color": "rgba(28, 27, 31, 1)",
+            "fontFamily": "System",
+            "fontWeight": "400",
+            "letterSpacing": 0,
+          },
+          {
+            "writingDirection": "ltr",
+          },
+          [
+            {
+              "alignItems": "center",
+              "fontSize": 12,
+              "fontWeight": "500",
+              "lineHeight": 24,
+            },
+            {
+              "maxHeight": 24,
+            },
+            {},
+            {
+              "color": "rgba(28, 27, 31, 0.6)",
+            },
+            undefined,
+          ],
+        ]
+      }
+    >
+      Age
+    </Text>
+  </View>
+  <View
+    accessibilityState={
+      {
+        "busy": undefined,
+        "checked": undefined,
+        "disabled": true,
+        "expanded": undefined,
+        "selected": undefined,
+      }
+    }
+    accessibilityValue={
+      {
+        "max": undefined,
+        "min": undefined,
+        "now": undefined,
+        "text": undefined,
+      }
+    }
+    accessible={true}
+    collapsable={false}
+    focusable={true}
+    onBlur={[Function]}
+    onClick={[Function]}
+    onFocus={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      [
+        {
+          "alignContent": "center",
+          "flex": 1,
+          "flexDirection": "row",
+          "paddingVertical": 12,
+        },
+        undefined,
+        undefined,
+      ]
+    }
+  >
+    <Text
+      numberOfLines={1}
+      style={
+        [
+          {
+            "textAlign": "left",
+          },
+          {
+            "color": "rgba(28, 27, 31, 1)",
+            "fontFamily": "System",
+            "fontWeight": "400",
+            "letterSpacing": 0,
+          },
+          {
+            "writingDirection": "ltr",
+          },
+          [
+            {
+              "alignItems": "center",
+              "fontSize": 12,
+              "fontWeight": "500",
+              "lineHeight": 24,
+            },
+            {
+              "maxHeight": 24,
+            },
+            {},
+            {
+              "color": "rgba(28, 27, 31, 0.6)",
+            },
+            undefined,
+          ],
+        ]
+      }
+    >
+      City
+    </Text>
+  </View>
+</View>
+`;

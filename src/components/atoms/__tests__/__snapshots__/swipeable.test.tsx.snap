@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SwipeableComponent Atom renders correctly 1`] = `
+<div>
+  Swipeable Content
+</div>
+`;
